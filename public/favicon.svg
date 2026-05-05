@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#ffffff" rx="12"/>
+  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+    font-family="Inter, -apple-system, sans-serif"
+    font-weight="600"
+    font-size="26"
+    fill="#223971">JP</text>
+</svg>
