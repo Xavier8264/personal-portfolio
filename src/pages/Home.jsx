@@ -119,7 +119,7 @@ export default function Home() {
           {/* Photo */}
           <div style={{ flex: '0 0 auto' }}>
             <img
-              src="/images/profile/jordan-prunty.jpg"
+              src="/images/profile/jordan-prunty.heic"
               alt="Jordan Prunty"
               style={{
                 width: 'clamp(220px, 30vw, 360px)',

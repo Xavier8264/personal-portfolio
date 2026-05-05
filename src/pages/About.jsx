@@ -79,7 +79,7 @@ export default function About() {
         {/* Photo */}
         <div style={{ flex: '0 0 auto' }}>
           <img
-            src="/images/profile/jordan-prunty.jpg"
+            src="/images/profile/jordan-prunty.heic"
             alt="Jordan Prunty"
             style={{
               width: 'clamp(200px, 25vw, 300px)',
