@@ -3,6 +3,7 @@ import { projects } from '../data/projects'
 import SkillTag from '../components/SkillTag'
 import BOMTable from '../components/BOMTable'
 import SectionFade from '../components/SectionFade'
+import SEO from '../components/SEO'
 
 function GitHubIcon() {
   return (
@@ -36,6 +37,33 @@ export default function ProjectDetail() {
 
   return (
     <div>
+      <SEO
+        title={`${title} — Jordan Prunty`}
+        description={`${project.tagline} — A mechanical engineering project by Jordan Prunty using ${skillsUsed.slice(0, 4).join(', ')}.`}
+        canonical={`/projects/${project.slug}`}
+        image={heroImage}
+      />
+
+      {/* JSON-LD CreativeWork schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            "name": title,
+            "description": project.tagline,
+            "url": `https://jordanprunty.com/projects/${project.slug}`,
+            "author": {
+              "@type": "Person",
+              "name": "Jordan Prunty",
+              "url": "https://jordanprunty.com"
+            },
+            "keywords": skillsUsed.join(', ')
+          })
+        }}
+      />
+
       {/* Hero image with title overlay */}
       <div
         style={{
@@ -48,7 +76,7 @@ export default function ProjectDetail() {
       >
         <img
           src={heroImage}
-          alt={title}
+          alt={`${title} — Jordan Prunty engineering project`}
           style={{
             width: '100%',
             maxHeight: 480,

@@ -1,5 +1,6 @@
 import { skillCategories } from '../data/skills'
 import SkillTag from '../components/SkillTag'
+import SEO from '../components/SEO'
 
 const ambientImages = [
   '/images/skills/ambient-1.jpg',
@@ -10,6 +11,11 @@ const ambientImages = [
 export default function Skills() {
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '100px 24px 80px' }}>
+      <SEO
+        title="Skills — Jordan Prunty | Mechanical Engineer"
+        description="Jordan Prunty's technical skills: SolidWorks, Fusion 360, Creo, Python, Raspberry Pi, Arduino, CAD, 3D printing, kinematics, computer vision, and more."
+        canonical="/skills"
+      />
       <h1
         style={{
           fontSize: 'clamp(2rem, 4vw, 3rem)',

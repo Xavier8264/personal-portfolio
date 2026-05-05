@@ -1,11 +1,17 @@
 import { projects } from '../data/projects'
 import ProjectCard from '../components/ProjectCard'
+import SEO from '../components/SEO'
 
 const published = projects.filter(p => p.published)
 
 export default function Projects() {
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '100px 24px 80px' }}>
+      <SEO
+        title="Engineering Projects — Jordan Prunty"
+        description="Browse Jordan Prunty's mechanical engineering projects: a Rubik's Cube solving robot, 3D printed chess robot, 2D iPhone gantry, and plastination lab monitor. Built with Raspberry Pi, Arduino, Python, and CAD."
+        canonical="/projects"
+      />
       <h1
         style={{
           fontSize: 'clamp(2rem, 4vw, 3rem)',

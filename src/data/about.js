@@ -11,7 +11,7 @@
   - The download button on the About page requires no changes
 */
 
-export const bio = `Hey, I'm Jordan Prunty, and I'm a 4th year mechanical engineering student at Union University in Jackson TN. I'm passionate about building things, working out and hiking. I love building projects that are both visually stunning, are technically impressive, and develop skills that could be applied to industry. I am interested in CAD design, computer vision, and generative AI tools. My projects span from addressable LED stage displays to integrating a dynamic custom website with real life mechanisms. I am continuously expanding my technical skill set and taking on more complex projects to improve my capabilities. My long-term goal is to design and build solutions that are robust, elegant, and technically sound that have genuine real-world implications that save time and money.`
+export const bio = `I'm Jordan Prunty, a mechanical engineering student at Union University in Jackson, TN. I'm passionate about building things that are both technically impressive and visually well-crafted. I love building projects that are both visually stunning, are technically impressive, and develop skills that could be applied to industry. I am interested in CAD design, computer vision, and generative AI tools. My projects span from addressable LED stage displays to integrating a dynamic custom website with real life mechanisms. I am continuously expanding my technical skill set and taking on more complex projects to improve my capabilities. My long-term goal is to design and build solutions that are robust, elegant, and technically sound that have genuine real-world implications that save time and money.`
 
 export const resume = {
   name: "Jordan Prunty",

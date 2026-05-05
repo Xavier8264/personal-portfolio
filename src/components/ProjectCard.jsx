@@ -31,7 +31,7 @@ export default function ProjectCard({ project }) {
       <div style={{ position: 'relative', paddingTop: '56.25%', overflow: 'hidden' }}>
         <img
           src={heroImage}
-          alt={title}
+          alt={`${title} — Jordan Prunty engineering project`}
           style={{
             position: 'absolute',
             inset: 0,

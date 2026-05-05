@@ -1,4 +1,5 @@
 import { bio, resume } from '../data/about'
+import SEO from '../components/SEO'
 
 function DownloadIcon() {
   return (
@@ -40,6 +41,11 @@ const downloadBtn = {
 export default function About() {
   return (
     <div style={{ maxWidth: 1000, margin: '0 auto', padding: '100px 24px 80px' }}>
+      <SEO
+        title="About Jordan Prunty — Mechanical Engineering Student"
+        description="Learn about Jordan Prunty, a mechanical engineering student at Union University in Jackson, TN, with experience in CAD, robotics, embedded systems, and an engineering internship at Quality Metal Stamping."
+        canonical="/about"
+      />
 
       {/* ─── Bio Section ─── */}
       <div
@@ -80,7 +86,7 @@ export default function About() {
         <div style={{ flex: '0 0 auto' }}>
           <img
             src="/images/profile/jordan-prunty.heic"
-            alt="Jordan Prunty"
+            alt="Jordan Prunty, Mechanical Engineering Student"
             style={{
               width: 'clamp(200px, 25vw, 300px)',
               aspectRatio: '4/5',

@@ -1,5 +1,6 @@
 import { useForm, ValidationError } from '@formspree/react'
 import { socialLinks, contactInfo } from '../data/social'
+import SEO from '../components/SEO'
 
 const inputStyle = {
   width: '100%',
@@ -32,6 +33,11 @@ export default function Contact() {
 
   return (
     <div style={{ maxWidth: 1000, margin: '0 auto', padding: '100px 24px 80px' }}>
+      <SEO
+        title="Contact Jordan Prunty — Mechanical Engineer"
+        description="Get in touch with Jordan Prunty, mechanical engineering student and builder. Open to internships, full-time roles, freelance projects, and collaborations."
+        canonical="/contact"
+      />
       <h1
         style={{
           fontSize: 'clamp(2rem, 4vw, 3rem)',

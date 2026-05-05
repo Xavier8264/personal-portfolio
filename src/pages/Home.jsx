@@ -4,6 +4,7 @@ import { skillCategories } from '../data/skills'
 import ProjectCard from '../components/ProjectCard'
 import SkillTag from '../components/SkillTag'
 import SectionFade from '../components/SectionFade'
+import SEO from '../components/SEO'
 
 const published = projects.filter(p => p.published)
 
@@ -44,6 +45,52 @@ const sectionHeading = {
 export default function Home() {
   return (
     <div>
+      <SEO
+        title="Jordan Prunty — Mechanical Engineer | Portfolio"
+        description="Jordan Prunty is a mechanical engineering student at Union University in Jackson, TN. Building robots, CAD systems, and embedded hardware. View his full portfolio."
+        canonical="/"
+      />
+
+      {/* JSON-LD Person Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Jordan Prunty",
+            "url": "https://jordanprunty.com",
+            "jobTitle": "Mechanical Engineering Student",
+            "description": "Mechanical engineering student at Union University specializing in CAD design, embedded systems, computer vision, and robotics.",
+            "alumniOf": {
+              "@type": "CollegeOrUniversity",
+              "name": "Union University",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Jackson",
+                "addressRegion": "TN"
+              }
+            },
+            "knowsAbout": [
+              "Mechanical Engineering",
+              "CAD Design",
+              "SolidWorks",
+              "Fusion 360",
+              "3D Printing",
+              "Robotics",
+              "Embedded Systems",
+              "Raspberry Pi",
+              "Computer Vision",
+              "Kinematics",
+              "GD&T"
+            ],
+            "sameAs": [
+              "https://github.com/Xavier8264",
+              "https://www.linkedin.com/in/jordan-prunty-96aa2938a/"
+            ]
+          })
+        }}
+      />
       {/* ─── Hero ─── */}
       <section
         style={{
@@ -77,7 +124,7 @@ export default function Home() {
                 lineHeight: 1.1,
               }}
             >
-              Hi, I'm Jordan.
+              Hi, I'm Jordan Prunty.
             </h1>
             <p
               style={{
@@ -120,7 +167,7 @@ export default function Home() {
           <div style={{ flex: '0 0 auto' }}>
             <img
               src="/images/profile/jordan-prunty.heic"
-              alt="Jordan Prunty"
+              alt="Jordan Prunty, Mechanical Engineering Student"
               style={{
                 width: 'clamp(220px, 30vw, 360px)',
                 aspectRatio: '4/5',
