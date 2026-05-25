@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jordan's Dirty Bulk Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #181818;
+    --card: #1f1f1f;
+    --border: #2e2e2e;
+    --accent: #d4ff00;
+    --accent2: #ff6b2b;
+    --text: #f0f0f0;
+    --muted: #888;
+    --protein: #ff6b2b;
+    --carbs: #d4ff00;
+    --fat: #7c9eff;
+    --cal: #ff4f8b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    padding: 48px 32px 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(212,255,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+  h1 span { color: var(--accent); }
+  .header-sub {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .stat {
+    flex: 1;
+    min-width: 120px;
+    padding: 20px 24px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+  }
+  .stat-val.cal { color: var(--cal); }
+  .stat-val.protein { color: var(--protein); }
+  .stat-val.carbs { color: var(--carbs); }
+  .stat-val.fat { color: var(--fat); }
+  .stat-val.cost { color: var(--accent); }
+
+  /* DAY TABS */
+  .day-nav {
+    display: flex;
+    gap: 0;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .day-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    color: var(--muted);
+    padding: 16px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .day-btn:hover { color: var(--text); }
+  .day-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN CONTENT */
+  .main { padding: 32px; }
+
+  /* MEAL CARDS */
+  .meals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .meal-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .meal-card:hover { border-color: #444; }
+  .meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .meal-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .meal-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    margin-top: 2px;
+  }
+  .meal-cals {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--cal);
+    line-height: 1;
+  }
+  .meal-cals span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    text-align: right;
+    margin-top: 2px;
+  }
+  .meal-body { padding: 16px 18px; }
+  .food-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 5px 0;
+    border-bottom: 1px solid #252525;
+    font-size: 13px;
+  }
+  .food-item:last-child { border-bottom: none; }
+  .food-name { color: var(--text); }
+  .food-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .meal-macros {
+    display: flex;
+    gap: 12px;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    background: #191919;
+  }
+  .macro-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .macro-chip.p { background: rgba(255,107,43,0.15); color: var(--protein); }
+  .macro-chip.c { background: rgba(212,255,0,0.1); color: var(--carbs); }
+  .macro-chip.f { background: rgba(124,158,255,0.15); color: var(--fat); }
+
+  /* DAY TOTAL */
+  .day-total {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  .day-total-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .day-total-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+  }
+  .progress-bar-wrap {
+    flex: 1;
+    min-width: 200px;
+  }
+  .progress-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: #2a2a2a;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  /* GROCERY SECTION */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .section-title span { color: var(--accent); }
+  .grocery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .grocery-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .grocery-name { font-size: 13px; }
+  .grocery-right { text-align: right; }
+  .grocery-qty {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .grocery-cost {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent);
+  }
+
+  /* TIPS */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 2px;
+    padding: 16px 18px;
+  }
+  .tip-card h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    color: var(--accent2);
+  }
+  .tip-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* HIDDEN */
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">10-Week Program // 4 Meals/Day // No Seafood</div>
+  <h1>DIRTY<br><span>BULK</span></h1>
+  <div class="header-sub">TARGET: 25+ LBS // 155 LBS -> 180+ LBS // 6'0" // 21YO</div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-label">Daily Target</div>
+    <div class="stat-val cal">3,600</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Protein</div>
+    <div class="stat-val protein">190g</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Carbs</div>
+    <div class="stat-val carbs">440g</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Fat</div>
+    <div class="stat-val fat">110g</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Est. Weekly Cost</div>
+    <div class="stat-val cost">~$75</div>
+  </div>
+</div>
+
+<nav class="day-nav">
+  <button class="day-btn active" onclick="switchDay(0)">MON</button>
+  <button class="day-btn" onclick="switchDay(1)">TUE</button>
+  <button class="day-btn" onclick="switchDay(2)">WED</button>
+  <button class="day-btn" onclick="switchDay(3)">THU</button>
+  <button class="day-btn" onclick="switchDay(4)">FRI</button>
+  <button class="day-btn" onclick="switchDay(5)">SAT</button>
+  <button class="day-btn" onclick="switchDay(6)">SUN</button>
+  <button class="day-btn" onclick="switchDay(7)">GROCERY</button>
+  <button class="day-btn" onclick="switchDay(8)">TIPS</button>
+</nav>
+
+<div class="main">
+
+  <!-- MON -->
+  <div class="day-panel active" id="panel-0">
+    <div class="day-total">
+      <div>
+        <div class="day-total-label">Monday Total</div>
+        <div class="day-total-num cal">3,620</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Protein 192g</span><span>Target 190g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:101%;background:var(--protein)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Carbs 445g</span><span>Target 440g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:101%;background:var(--carbs)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Fat 108g</span><span>Target 110g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:98%;background:var(--fat)"></div></div>
+      </div>
+    </div>
+    <div class="meals-grid">
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 01 // 7-8 AM</div><div class="meal-name">Power Breakfast</div></div>
+          <div class="meal-cals">920<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole eggs (scrambled)</span><span class="food-amount">4 large</span></div>
+          <div class="food-item"><span class="food-name">White rice (cooked)</span><span class="food-amount">2 cups</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 large</span></div>
+          <div class="food-item"><span class="food-name">Butter (on eggs)</span><span class="food-amount">1 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 48g</div>
+          <div class="macro-chip c">C 118g</div>
+          <div class="macro-chip f">F 28g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 02 // 12-1 PM</div><div class="meal-name">Beef Rice Bowl</div></div>
+          <div class="meal-cals">1,050<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">80/20 ground beef</span><span class="food-amount">8 oz raw</span></div>
+          <div class="food-item"><span class="food-name">White rice (cooked)</span><span class="food-amount">2.5 cups</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1 oz</span></div>
+          <div class="food-item"><span class="food-name">Sour cream</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Olive oil (cook in)</span><span class="food-amount">1 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 56g</div>
+          <div class="macro-chip c">C 116g</div>
+          <div class="macro-chip f">F 38g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 03 // 5-6 PM</div><div class="meal-name">Pasta + Chicken</div></div>
+          <div class="meal-cals">970<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Chicken thighs (boneless)</span><span class="food-amount">6 oz cooked</span></div>
+          <div class="food-item"><span class="food-name">Penne pasta (cooked)</span><span class="food-amount">2.5 cups</span></div>
+          <div class="food-item"><span class="food-name">Jarred marinara</span><span class="food-amount">0.5 cup</span></div>
+          <div class="food-item"><span class="food-name">Parmesan</span><span class="food-amount">1 oz</span></div>
+          <div class="food-item"><span class="food-name">Olive oil (toss pasta)</span><span class="food-amount">1 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 52g</div>
+          <div class="macro-chip c">C 120g</div>
+          <div class="macro-chip f">F 24g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 04 // 9-10 PM</div><div class="meal-name">Night Mass Shake</div></div>
+          <div class="meal-cals">680<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Whey protein</span><span class="food-amount">2 scoops</span></div>
+          <div class="food-item"><span class="food-name">Oats (blended in)</span><span class="food-amount">0.5 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 medium</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 91g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUE -->
+  <div class="day-panel" id="panel-1">
+    <div class="day-total">
+      <div>
+        <div class="day-total-label">Tuesday Total</div>
+        <div class="day-total-num cal">3,580</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Protein 188g</span><span>Target 190g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:99%;background:var(--protein)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Carbs 435g</span><span>Target 440g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:99%;background:var(--carbs)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Fat 112g</span><span>Target 110g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--fat)"></div></div>
+      </div>
+    </div>
+    <div class="meals-grid">
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 01 // 7-8 AM</div><div class="meal-name">Oat Stack</div></div>
+          <div class="meal-cals">880<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Rolled oats (cooked in milk)</span><span class="food-amount">1 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">3 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Honey</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole eggs (boiled)</span><span class="food-amount">3 large</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 46g</div>
+          <div class="macro-chip c">C 108g</div>
+          <div class="macro-chip f">F 32g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 02 // 12-1 PM</div><div class="meal-name">Chicken Burrito Bowl</div></div>
+          <div class="meal-cals">1,020<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Chicken breast (grilled)</span><span class="food-amount">8 oz cooked</span></div>
+          <div class="food-item"><span class="food-name">White rice (cooked)</span><span class="food-amount">2 cups</span></div>
+          <div class="food-item"><span class="food-name">Black beans (canned)</span><span class="food-amount">0.5 cup</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1.5 oz</span></div>
+          <div class="food-item"><span class="food-name">Sour cream</span><span class="food-amount">3 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 72g</div>
+          <div class="macro-chip c">C 110g</div>
+          <div class="macro-chip f">F 28g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 03 // 5-6 PM</div><div class="meal-name">Beef + Potato</div></div>
+          <div class="meal-cals">1,000<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">80/20 ground beef</span><span class="food-amount">7 oz raw</span></div>
+          <div class="food-item"><span class="food-name">Russet potatoes (baked)</span><span class="food-amount">2 medium</span></div>
+          <div class="food-item"><span class="food-name">Butter (on potato)</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1 oz</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">8 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 48g</div>
+          <div class="macro-chip c">C 110g</div>
+          <div class="macro-chip f">F 34g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 04 // 9-10 PM</div><div class="meal-name">Night Mass Shake</div></div>
+          <div class="meal-cals">680<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Whey protein</span><span class="food-amount">2 scoops</span></div>
+          <div class="food-item"><span class="food-name">Oats (blended in)</span><span class="food-amount">0.5 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 medium</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 91g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WED -->
+  <div class="day-panel" id="panel-2">
+    <div class="day-total">
+      <div>
+        <div class="day-total-label">Wednesday Total</div>
+        <div class="day-total-num cal">3,640</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Protein 194g</span><span>Target 190g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:102%;background:var(--protein)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Carbs 438g</span><span>Target 440g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--carbs)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Fat 112g</span><span>Target 110g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--fat)"></div></div>
+      </div>
+    </div>
+    <div class="meals-grid">
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 01 // 7-8 AM</div><div class="meal-name">French Toast Stack</div></div>
+          <div class="meal-cals">930<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">White bread (thick)</span><span class="food-amount">4 slices</span></div>
+          <div class="food-item"><span class="food-name">Whole eggs (batter)</span><span class="food-amount">3 large</span></div>
+          <div class="food-item"><span class="food-name">Whole milk (batter)</span><span class="food-amount">0.5 cup</span></div>
+          <div class="food-item"><span class="food-name">Maple syrup</span><span class="food-amount">3 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Butter (cook)</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole milk (drink)</span><span class="food-amount">16 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 44g</div>
+          <div class="macro-chip c">C 122g</div>
+          <div class="macro-chip f">F 30g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 02 // 12-1 PM</div><div class="meal-name">Pulled Chicken + Rice</div></div>
+          <div class="meal-cals">980<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Chicken thighs (shredded)</span><span class="food-amount">8 oz cooked</span></div>
+          <div class="food-item"><span class="food-name">White rice (cooked)</span><span class="food-amount">2.5 cups</span></div>
+          <div class="food-item"><span class="food-name">BBQ sauce</span><span class="food-amount">3 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1 oz</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">8 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 60g</div>
+          <div class="macro-chip c">C 116g</div>
+          <div class="macro-chip f">F 26g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 03 // 5-6 PM</div><div class="meal-name">Spaghetti Bolognese</div></div>
+          <div class="meal-cals">1,050<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">80/20 ground beef</span><span class="food-amount">7 oz raw</span></div>
+          <div class="food-item"><span class="food-name">Spaghetti (cooked)</span><span class="food-amount">3 cups</span></div>
+          <div class="food-item"><span class="food-name">Jarred marinara</span><span class="food-amount">0.5 cup</span></div>
+          <div class="food-item"><span class="food-name">Parmesan</span><span class="food-amount">1 oz</span></div>
+          <div class="food-item"><span class="food-name">Olive oil</span><span class="food-amount">1 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 54g</div>
+          <div class="macro-chip c">C 114g</div>
+          <div class="macro-chip f">F 38g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 04 // 9-10 PM</div><div class="meal-name">Night Mass Shake</div></div>
+          <div class="meal-cals">680<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Whey protein</span><span class="food-amount">2 scoops</span></div>
+          <div class="food-item"><span class="food-name">Oats (blended in)</span><span class="food-amount">0.5 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 medium</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 91g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THU -->
+  <div class="day-panel" id="panel-3">
+    <div class="day-total">
+      <div>
+        <div class="day-total-label">Thursday Total</div>
+        <div class="day-total-num cal">3,610</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Protein 190g</span><span>Target 190g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--protein)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Carbs 442g</span><span>Target 440g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--carbs)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Fat 106g</span><span>Target 110g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:96%;background:var(--fat)"></div></div>
+      </div>
+    </div>
+    <div class="meals-grid">
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 01 // 7-8 AM</div><div class="meal-name">Egg Fried Rice</div></div>
+          <div class="meal-cals">910<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">White rice (cooked, day-old)</span><span class="food-amount">2 cups</span></div>
+          <div class="food-item"><span class="food-name">Whole eggs</span><span class="food-amount">4 large</span></div>
+          <div class="food-item"><span class="food-name">Butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Soy sauce</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 46g</div>
+          <div class="macro-chip c">C 106g</div>
+          <div class="macro-chip f">F 30g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 02 // 12-1 PM</div><div class="meal-name">Steak + Potato</div></div>
+          <div class="meal-cals">1,020<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Chuck steak (pan-seared)</span><span class="food-amount">8 oz raw</span></div>
+          <div class="food-item"><span class="food-name">Russet potatoes (baked)</span><span class="food-amount">2 medium</span></div>
+          <div class="food-item"><span class="food-name">Butter (on potato)</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Sour cream</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">8 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 115g</div>
+          <div class="macro-chip f">F 30g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 03 // 5-6 PM</div><div class="meal-name">Chicken + Pasta Bake</div></div>
+          <div class="meal-cals">1,000<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Chicken breast (diced)</span><span class="food-amount">7 oz cooked</span></div>
+          <div class="food-item"><span class="food-name">Penne pasta (cooked)</span><span class="food-amount">2.5 cups</span></div>
+          <div class="food-item"><span class="food-name">Cream of mushroom soup</span><span class="food-amount">0.5 can</span></div>
+          <div class="food-item"><span class="food-name">Shredded mozzarella</span><span class="food-amount">1.5 oz</span></div>
+          <div class="food-item"><span class="food-name">Olive oil</span><span class="food-amount">1 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 52g</div>
+          <div class="macro-chip c">C 130g</div>
+          <div class="macro-chip f">F 28g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 04 // 9-10 PM</div><div class="meal-name">Night Mass Shake</div></div>
+          <div class="meal-cals">680<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Whey protein</span><span class="food-amount">2 scoops</span></div>
+          <div class="food-item"><span class="food-name">Oats (blended in)</span><span class="food-amount">0.5 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 medium</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 91g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRI -->
+  <div class="day-panel" id="panel-4">
+    <div class="day-total">
+      <div>
+        <div class="day-total-label">Friday Total</div>
+        <div class="day-total-num cal">3,590</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Protein 186g</span><span>Target 190g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:98%;background:var(--protein)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Carbs 440g</span><span>Target 440g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--carbs)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Fat 110g</span><span>Target 110g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--fat)"></div></div>
+      </div>
+    </div>
+    <div class="meals-grid">
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 01 // 7-8 AM</div><div class="meal-name">Pancake Stack</div></div>
+          <div class="meal-cals">920<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Pancake mix (made w/ milk)</span><span class="food-amount">1.5 cups dry</span></div>
+          <div class="food-item"><span class="food-name">Whole milk (in batter)</span><span class="food-amount">1 cup</span></div>
+          <div class="food-item"><span class="food-name">Maple syrup</span><span class="food-amount">3 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole eggs (side)</span><span class="food-amount">3 large</span></div>
+          <div class="food-item"><span class="food-name">Whole milk (drink)</span><span class="food-amount">8 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 42g</div>
+          <div class="macro-chip c">C 126g</div>
+          <div class="macro-chip f">F 30g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 02 // 12-1 PM</div><div class="meal-name">Ground Beef Tacos</div></div>
+          <div class="meal-cals">990<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">80/20 ground beef</span><span class="food-amount">7 oz raw</span></div>
+          <div class="food-item"><span class="food-name">Flour tortillas (large)</span><span class="food-amount">3 tortillas</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1.5 oz</span></div>
+          <div class="food-item"><span class="food-name">Sour cream</span><span class="food-amount">3 tbsp</span></div>
+          <div class="food-item"><span class="food-name">White rice (side)</span><span class="food-amount">1 cup cooked</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 52g</div>
+          <div class="macro-chip c">C 106g</div>
+          <div class="macro-chip f">F 38g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 03 // 5-6 PM</div><div class="meal-name">Chicken Alfredo</div></div>
+          <div class="meal-cals">1,000<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Chicken breast</span><span class="food-amount">7 oz cooked</span></div>
+          <div class="food-item"><span class="food-name">Fettuccine (cooked)</span><span class="food-amount">2.5 cups</span></div>
+          <div class="food-item"><span class="food-name">Alfredo sauce (jarred)</span><span class="food-amount">0.5 cup</span></div>
+          <div class="food-item"><span class="food-name">Parmesan</span><span class="food-amount">1 oz</span></div>
+          <div class="food-item"><span class="food-name">Butter</span><span class="food-amount">1 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 117g</div>
+          <div class="macro-chip f">F 24g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 04 // 9-10 PM</div><div class="meal-name">Night Mass Shake</div></div>
+          <div class="meal-cals">680<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Whey protein</span><span class="food-amount">2 scoops</span></div>
+          <div class="food-item"><span class="food-name">Oats (blended in)</span><span class="food-amount">0.5 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 medium</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 91g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAT -->
+  <div class="day-panel" id="panel-5">
+    <div class="day-total">
+      <div>
+        <div class="day-total-label">Saturday Total</div>
+        <div class="day-total-num cal">3,700</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Protein 196g</span><span>Target 190g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:103%;background:var(--protein)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Carbs 448g</span><span>Target 440g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:102%;background:var(--carbs)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Fat 114g</span><span>Target 110g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--fat)"></div></div>
+      </div>
+    </div>
+    <div class="meals-grid">
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 01 // 9-10 AM</div><div class="meal-name">Big Breakfast</div></div>
+          <div class="meal-cals">1,000<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole eggs (fried)</span><span class="food-amount">4 large</span></div>
+          <div class="food-item"><span class="food-name">White bread toast</span><span class="food-amount">4 slices</span></div>
+          <div class="food-item"><span class="food-name">Butter (on toast)</span><span class="food-amount">3 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Orange juice</span><span class="food-amount">12 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 42g</div>
+          <div class="macro-chip c">C 124g</div>
+          <div class="macro-chip f">F 36g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 02 // 2-3 PM</div><div class="meal-name">Smash Burgers</div></div>
+          <div class="meal-cals">1,060<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">80/20 ground beef patties</span><span class="food-amount">12 oz raw (2 patties)</span></div>
+          <div class="food-item"><span class="food-name">Brioche buns</span><span class="food-amount">2 buns</span></div>
+          <div class="food-item"><span class="food-name">American cheese</span><span class="food-amount">2 slices</span></div>
+          <div class="food-item"><span class="food-name">Mayo</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole milk (side)</span><span class="food-amount">8 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 68g</div>
+          <div class="macro-chip c">C 96g</div>
+          <div class="macro-chip f">F 46g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 03 // 6-7 PM</div><div class="meal-name">Beef + Rice + Beans</div></div>
+          <div class="meal-cals">960<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">80/20 ground beef</span><span class="food-amount">7 oz raw</span></div>
+          <div class="food-item"><span class="food-name">White rice (cooked)</span><span class="food-amount">2 cups</span></div>
+          <div class="food-item"><span class="food-name">Black beans (canned)</span><span class="food-amount">0.5 cup</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1 oz</span></div>
+          <div class="food-item"><span class="food-name">Olive oil</span><span class="food-amount">1 tbsp</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 56g</div>
+          <div class="macro-chip c">C 118g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 04 // 10-11 PM</div><div class="meal-name">Night Mass Shake</div></div>
+          <div class="meal-cals">680<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Whey protein</span><span class="food-amount">2 scoops</span></div>
+          <div class="food-item"><span class="food-name">Oats (blended in)</span><span class="food-amount">0.5 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 medium</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 91g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUN -->
+  <div class="day-panel" id="panel-6">
+    <div class="day-total">
+      <div>
+        <div class="day-total-label">Sunday Total</div>
+        <div class="day-total-num cal">3,600</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Protein 190g</span><span>Target 190g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--protein)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Carbs 442g</span><span>Target 440g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--carbs)"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Fat 108g</span><span>Target 110g</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:98%;background:var(--fat)"></div></div>
+      </div>
+    </div>
+    <div class="meals-grid">
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 01 // 9-10 AM</div><div class="meal-name">Breakfast Burritos</div></div>
+          <div class="meal-cals">960<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole eggs (scrambled)</span><span class="food-amount">4 large</span></div>
+          <div class="food-item"><span class="food-name">Flour tortillas (large)</span><span class="food-amount">2 large</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1.5 oz</span></div>
+          <div class="food-item"><span class="food-name">Sour cream</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 50g</div>
+          <div class="macro-chip c">C 108g</div>
+          <div class="macro-chip f">F 32g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 02 // 1-2 PM</div><div class="meal-name">Chicken + Rice Bowl</div></div>
+          <div class="meal-cals">960<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Chicken thighs (grilled)</span><span class="food-amount">8 oz cooked</span></div>
+          <div class="food-item"><span class="food-name">White rice (cooked)</span><span class="food-amount">2.5 cups</span></div>
+          <div class="food-item"><span class="food-name">Teriyaki sauce</span><span class="food-amount">3 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Sesame oil (drizzle)</span><span class="food-amount">1 tsp</span></div>
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">8 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 126g</div>
+          <div class="macro-chip f">F 20g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 03 // 5-6 PM</div><div class="meal-name">Beef Stir Fry + Rice</div></div>
+          <div class="meal-cals">1,000<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">80/20 ground beef</span><span class="food-amount">7 oz raw</span></div>
+          <div class="food-item"><span class="food-name">White rice (cooked)</span><span class="food-amount">2.5 cups</span></div>
+          <div class="food-item"><span class="food-name">Soy sauce</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Shredded cheddar</span><span class="food-amount">1 oz</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 50g</div>
+          <div class="macro-chip c">C 117g</div>
+          <div class="macro-chip f">F 38g</div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header">
+          <div><div class="meal-number">MEAL 04 // 9-10 PM</div><div class="meal-name">Night Mass Shake</div></div>
+          <div class="meal-cals">680<span>kcal</span></div>
+        </div>
+        <div class="meal-body">
+          <div class="food-item"><span class="food-name">Whole milk</span><span class="food-amount">16 oz</span></div>
+          <div class="food-item"><span class="food-name">Whey protein</span><span class="food-amount">2 scoops</span></div>
+          <div class="food-item"><span class="food-name">Oats (blended in)</span><span class="food-amount">0.5 cup dry</span></div>
+          <div class="food-item"><span class="food-name">Peanut butter</span><span class="food-amount">2 tbsp</span></div>
+          <div class="food-item"><span class="food-name">Banana</span><span class="food-amount">1 medium</span></div>
+        </div>
+        <div class="meal-macros">
+          <div class="macro-chip p">P 58g</div>
+          <div class="macro-chip c">C 91g</div>
+          <div class="macro-chip f">F 18g</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROCERY -->
+  <div class="day-panel" id="panel-7">
+    <p style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:24px;">Weekly shopping list. Buy in bulk where possible. Prices are Walmart/Kroger estimates.</p>
+    <div class="section-title">WEEKLY <span>GROCERY LIST</span></div>
+    <div class="grocery-grid">
+      <div class="grocery-item"><div><div class="grocery-name">80/20 Ground Beef</div><div class="grocery-qty">~4 lbs</div></div><div class="grocery-right"><div class="grocery-cost">~$14</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Boneless Chicken Thighs</div><div class="grocery-qty">~3 lbs</div></div><div class="grocery-right"><div class="grocery-cost">~$9</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Chicken Breast</div><div class="grocery-qty">~2 lbs</div></div><div class="grocery-right"><div class="grocery-cost">~$7</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Chuck Steak</div><div class="grocery-qty">~1 lb</div></div><div class="grocery-right"><div class="grocery-cost">~$7</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Whole Eggs (18-ct)</div><div class="grocery-qty">2 cartons</div></div><div class="grocery-right"><div class="grocery-cost">~$8</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Whole Milk (gallon)</div><div class="grocery-qty">2 gallons</div></div><div class="grocery-right"><div class="grocery-cost">~$8</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">White Rice (10 lb bag)</div><div class="grocery-qty">1 bag (lasts 2-3 wks)</div></div><div class="grocery-right"><div class="grocery-cost">~$6</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Pasta (penne/spaghetti)</div><div class="grocery-qty">3 lbs</div></div><div class="grocery-right"><div class="grocery-cost">~$4</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Rolled Oats (42 oz)</div><div class="grocery-qty">1 container</div></div><div class="grocery-right"><div class="grocery-cost">~$4</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Peanut Butter (40 oz)</div><div class="grocery-qty">1 jar</div></div><div class="grocery-right"><div class="grocery-cost">~$6</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Bananas</div><div class="grocery-qty">~14 bananas</div></div><div class="grocery-right"><div class="grocery-cost">~$2</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Russet Potatoes (5 lb)</div><div class="grocery-qty">1 bag</div></div><div class="grocery-right"><div class="grocery-cost">~$4</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Shredded Cheddar</div><div class="grocery-qty">2 bags (8 oz each)</div></div><div class="grocery-right"><div class="grocery-cost">~$6</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Butter (1 lb)</div><div class="grocery-qty">1 pack</div></div><div class="grocery-right"><div class="grocery-cost">~$4</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Sour Cream (16 oz)</div><div class="grocery-qty">1 tub</div></div><div class="grocery-right"><div class="grocery-cost">~$2</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Jarred Marinara</div><div class="grocery-qty">2 jars</div></div><div class="grocery-right"><div class="grocery-cost">~$4</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Black Beans (canned)</div><div class="grocery-qty">4 cans</div></div><div class="grocery-right"><div class="grocery-cost">~$3</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Flour Tortillas (lg)</div><div class="grocery-qty">2 packs</div></div><div class="grocery-right"><div class="grocery-cost">~$5</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Whey Protein (5 lb)</div><div class="grocery-qty">1 bag (lasts ~3 wks)</div></div><div class="grocery-right"><div class="grocery-cost">~$45</div></div></div>
+      <div class="grocery-item"><div><div class="grocery-name">Olive Oil</div><div class="grocery-qty">1 bottle</div></div><div class="grocery-right"><div class="grocery-cost">~$5</div></div></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);padding:16px 20px;display:inline-block;border-radius:2px;margin-top:8px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:4px;">ESTIMATED WEEKLY SPEND</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--accent);">~$70-80</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">Whey protein amortized. Rice/oats shared across weeks.</div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="day-panel" id="panel-8">
+    <div class="section-title">BULK <span>TACTICS</span></div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h4>Eat on a Clock</h4>
+        <p>Set alarms at 7am, noon, 5pm, 9pm. Your appetite won't tell you to eat enough — the schedule does. Non-negotiable.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Drink Whole Milk Constantly</h4>
+        <p>Whole milk is the cheapest calorie-dense liquid on earth. Carry it. Drink it with every meal. It adds 300+ calories per day with zero effort.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Night Mass Shake is Sacred</h4>
+        <p>Never skip Meal 4. This is your easiest 680 calories. Blend the oats — don't chew them. It goes down in 3 minutes flat.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Rice is Your Backbone</h4>
+        <p>Cook 6-8 cups of rice every 2 days and store in the fridge. Rice is cheap, dense, and goes with everything. Never run out.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Fat is Free Calories</h4>
+        <p>Butter on everything. Don't drain your beef grease — cook in it. Add olive oil to pasta before plating. These small adds are 200+ extra calories per day.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Weeks 1-2 Will Be Rough</h4>
+        <p>You will feel too full. Push through it anyway. Your stomach will expand and hunger signals will catch up around week 3. Don't reduce portions early.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Weigh Yourself Weekly</h4>
+        <p>Same time, same conditions — first thing Monday morning after using the bathroom. You should be up 2-2.5 lbs/week. If not, add calories.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Lift or the Surplus Becomes Fat</h4>
+        <p>You want to get fat but not only fat. Compound lifts 3-4x/week tells your body to partition surplus into muscle too. Keep training hard.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Calorie Escalation</h4>
+        <p>Weeks 1-3: hit 3,400. Weeks 4-7: push to 3,600. Weeks 8-10: push to 3,800+ if stomach allows. Your metabolism will adapt — keep ahead of it.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchDay(idx) {
+  document.querySelectorAll('.day-panel').forEach((p,i) => {
+    p.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.day-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === idx);
+  });
+}
+</script>
+</body>
+</html>

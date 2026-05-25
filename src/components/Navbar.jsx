@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 
 const NAV_LINKS = [
   { label: 'Home', to: '/' },
@@ -11,7 +11,26 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showToast, setShowToast] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
+  const clickCount = useRef(0)
+  const resetTimer = useRef(null)
+
+  function handleWordmarkClick() {
+    clearTimeout(resetTimer.current)
+    const newCount = clickCount.current + 1
+    clickCount.current = newCount
+    if (newCount >= 5) {
+      clickCount.current = 0
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2500)
+      navigate('/lab')
+      return
+    }
+    resetTimer.current = setTimeout(() => { clickCount.current = 0 }, 2000)
+    if (newCount === 1) navigate('/')
+  }
 
   // Close menu on route change
   useEffect(() => {
@@ -46,19 +65,24 @@ export default function Navbar() {
           justifyContent: 'space-between',
         }}
       >
-        {/* Wordmark */}
-        <Link
-          to="/"
+        {/* Wordmark — click 5× quickly to unlock /lab */}
+        <span
+          onClick={handleWordmarkClick}
+          role="link"
+          tabIndex={0}
+          onKeyDown={e => e.key === 'Enter' && handleWordmarkClick()}
           style={{
             fontWeight: 600,
             fontSize: '1.05rem',
             color: 'var(--color-accent-dark)',
             letterSpacing: '-0.02em',
             textDecoration: 'none',
+            cursor: 'pointer',
+            userSelect: 'none',
           }}
         >
           Jordan Prunty
-        </Link>
+        </span>
 
         {/* Desktop nav */}
         <nav style={{ display: 'flex', gap: 32 }} className="hidden-mobile">
@@ -171,6 +195,31 @@ export default function Navbar() {
           .show-mobile { display: flex !important; }
         }
       `}</style>
+
+      {/* Easter egg toast */}
+      {showToast && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 24,
+            right: 24,
+            backgroundColor: '#0e0e0e',
+            color: '#d4ff00',
+            border: '1px solid #d4ff00',
+            borderRadius: 10,
+            padding: '12px 20px',
+            fontSize: '0.85rem',
+            fontWeight: 600,
+            fontFamily: 'monospace',
+            letterSpacing: '0.05em',
+            zIndex: 9999,
+            boxShadow: '0 4px 24px rgba(212,255,0,0.25)',
+            pointerEvents: 'none',
+          }}
+        >
+          ⚡ secret lab unlocked
+        </div>
+      )}
     </header>
   )
 }

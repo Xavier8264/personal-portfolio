@@ -8,6 +8,7 @@ import ProjectDetail from './pages/ProjectDetail'
 import Skills from './pages/Skills'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import LabDashboard from './pages/LabDashboard'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -34,6 +35,10 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
+        {/* Secret lab — rendered outside shared Layout (no Navbar/Footer) */}
+        <Route path="/lab" element={<LabDashboard />} />
+
+        {/* Main portfolio — wrapped in shared Layout */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
